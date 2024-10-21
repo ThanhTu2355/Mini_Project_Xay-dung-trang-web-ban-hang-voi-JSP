@@ -37,13 +37,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.11.0</version> <!-- Cập nhật phiên bản plugin -->
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                    <compilerArguments>
-                        <endorseddirs>${endorsed.dir}</endorseddirs>
-                    </compilerArguments>
+                    <source>1.8</source> <!-- Cập nhật phiên bản Java -->
+                    <target>1.8</target> <!-- Cập nhật phiên bản Java -->
                 </configuration>
             </plugin>
             <plugin>

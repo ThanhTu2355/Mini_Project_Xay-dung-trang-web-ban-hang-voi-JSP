@@ -1,5 +1,5 @@
  <footer class="container">
-            <strong>&copy; 2023 - Student Name - Id </strong>
+            <strong>&copy; 2024 - Nguyen Thanh Tu - 2321160028 </strong>
         </footer>
 
         <!-- Optional JavaScript -->
