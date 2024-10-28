@@ -8,17 +8,23 @@ import dao.HoaDAO;
 import dao.LoaiDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
+import java.sql.Date;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import model.Hoa;
 
 /**
  *
  * @author PC
  */
 @WebServlet(name = "ManagerProduct", urlPatterns = {"/ManagerProduct"})
+@MultipartConfig
 public class ManagerProduct extends HttpServlet {
 
     /**
@@ -48,15 +54,51 @@ public class ManagerProduct extends HttpServlet {
                 request.getRequestDispatcher("admin/list_product.jsp").forward(request, response);
                 break;
             case "ADD":
-                //Tra ve giao dien them moi san pham
-                request.setAttribute("dsLoai", loaiDAO.getAll());
-                request.getRequestDispatcher("admin/add_product.jsp").forward(request, response);
+                String method = request.getMethod();
+                if (method.equalsIgnoreCase("get")) {
+                    //tra ve gioa dien them moi san pham
+                    request.setAttribute("dsLoai", loaiDAO.getAll());
+                    request.getRequestDispatcher("admin/add_product.jsp").forward(request, response);
+                } else {
+                    //xu ly them moi san pham
+                    //b1 Lay thong tin san pham
+                    String tenhoa = request.getParameter("tenhoa");
+                    double gia = Double.parseDouble(request.getParameter("gia"));
+                    Part part = request.getPart("hinh");
+                    int maloai = Integer.parseInt(request.getParameter("maloai"));
+
+                    //b2 Xu ly upload file
+                    String realpath = request.getServletContext().getRealPath("/assets/images/products");
+                    String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+                    part.write(realpath + "/" + filename);
+
+                    //3. Them san pham vao CSDL
+                    Hoa objInsert = new Hoa(0, tenhoa, gia, filename, maloai, new Date(new java.util.Date().getTime()));
+                    if (hoaDAO.Insert(objInsert)) {
+                        //thong bao them thanh cong
+                        request.setAttribute("success", "Thao tac them san pham thanh cong");
+                    } else {
+                        //thong bao them that bai
+                        request.setAttribute("orror", "Thao tac them san pham that bai");
+                    }
+                    request.getRequestDispatcher("ManagerProduct?action=LIST").forward(request, response);
+                }
                 break;
             case "EDIT":
                 //Tra ve giao dien cap nhat san pham
                 break;
             case "DELETE":
                 //Xu ly xoa san pham
+                //b1 Lay ma san pham
+                int mahoa = Integer.parseInt(request.getParameter("mahoa"));
+                //2. Xoa san pham khoi CSDL
+                if (hoaDAO.Delete(mahoa)) {
+                    request.setAttribute("success", "Thao tac xoa san pham thanh cong");
+                } else {
+                    //thong bao them that bai
+                    request.setAttribute("orror", "Thao tac xoa san pham that bai");
+                }
+                request.getRequestDispatcher("ManagerProduct?action=LIST").forward(request, response);
                 break;
         }
     }
