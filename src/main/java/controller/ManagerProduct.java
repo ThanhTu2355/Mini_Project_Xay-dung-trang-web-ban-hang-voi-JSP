@@ -89,7 +89,7 @@ public class ManagerProduct extends HttpServlet {
                 //Tra ve giao dien cap nhat san pham
                 if (method.equalsIgnoreCase("get")) {
                     int mahoa = Integer.parseInt(request.getParameter("mahoa"));
-                    request.setAttribute("hoa", hoaDAO.getByCategoryId(mahoa));
+                    request.setAttribute("hoa", hoaDAO.getById(mahoa));
                     request.setAttribute("dsLoai", loaiDAO.getAll());
                     request.getRequestDispatcher("admin/edit_product.jsp").forward(request, response);
                 } else {
@@ -116,7 +116,7 @@ public class ManagerProduct extends HttpServlet {
                         request.setAttribute("success", "Thao tac cap nhat san pham thanh cong");
                     } else {
                         //thong bao them that bai
-                        request.setAttribute("orror", "Thao tac cap nhat san pham that bai");
+                        request.setAttribute("error", "Thao tac cap nhat san pham that bai");
                     }
                     request.getRequestDispatcher("ManagerProduct?action=LIST").forward(request, response);
                 }
