@@ -52,7 +52,17 @@ public class ManagerProduct extends HttpServlet {
         switch (action) {
             case "LIST":
                 //Tra ve giao dien liet ke danh sach san pham quan tri
-                request.setAttribute("dsHoa", hoaDAO.getAll());
+                int pageSize = 5;
+                int pageIndex = 1;
+                if(request.getParameter("page")!=null){
+                    pageIndex= Integer.parseInt(request.getParameter("page"));
+                }
+                //tính tổng số trang có thể có
+                int sumOfPage = (int) Math.ceil((double) hoaDAO.getAll().size()/pageSize);
+                request.setAttribute("sumOfPage", sumOfPage);
+                request.setAttribute("pageIndex", pageIndex);
+                
+                request.setAttribute("dsHoa", hoaDAO.getByPage(pageIndex, pageSize));
                 request.getRequestDispatcher("admin/list_product.jsp").forward(request, response);
                 break;
             case "ADD":
