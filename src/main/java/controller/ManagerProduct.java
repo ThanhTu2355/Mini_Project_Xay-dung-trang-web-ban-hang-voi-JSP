@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import model.Hoa;
 
@@ -38,6 +39,11 @@ public class ManagerProduct extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //kiểm tra thông tin lịch sử đăng nhập
+        HttpSession session = request.getSession();
+        if(session.getAttribute("username")==null){
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
         response.setContentType("text/html;charset=UTF-8");
 
         HoaDAO hoaDAO = new HoaDAO();
