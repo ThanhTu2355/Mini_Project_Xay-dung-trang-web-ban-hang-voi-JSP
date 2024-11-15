@@ -12,15 +12,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import model.TaiKhoan;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "RegisterServlet", urlPatterns = {"/RegisterServlet"})
+public class RegisterServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,27 +33,16 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         //b1. lấy thông tin username - password
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        String tendangnhap = request.getParameter("tendangnhap");
+        String matkhau = request.getParameter("matkhau");
         
-        //b2. Xác thực thông tin
-        TaiKhoanDAO tkDAO = new TaiKhoanDAO();
-        TaiKhoan tk = tkDAO.checkLogin(username, password);
+        TaiKhoanDAO tkRegister = new TaiKhoanDAO();
+        tkRegister.register(tendangnhap, matkhau);
         
-        if(tk!=null){//thành công
-            //lưu thông tin lịch sử (tài khoản xác thực thành công) vào session của người dùng
-            HttpSession session = request.getSession();
-            session.setAttribute("username", username);         
-            //điều hướng tới trang mặc định
-            response.sendRedirect("home.jsp");
-        }else{//thất bại
-            request.setAttribute("error", "Đăng nhập thất bại. (Do sai tên hoặc mật khẩu)");
-            //chuyển tiếp đến trang login
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        }
+        request.getRequestDispatcher("login.jsp").forward(request, response);
+        
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            
         }
     }
 

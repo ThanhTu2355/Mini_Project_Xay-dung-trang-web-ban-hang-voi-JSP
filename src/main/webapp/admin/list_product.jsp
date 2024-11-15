@@ -66,12 +66,18 @@
         //Lấy tổng só trang từ servlet
         int sumOfPage = (int) request.getAttribute("sumOfPage");
         int pageIndex = (int) request.getAttribute("pageIndex");
-        for (int i = 1; i <= sumOfPage; i++) {
     %>
+    <li class="page-item <%=pageIndex == 1 ? "disable" : ""%>"><a class="page-link" href="ManagerProduct?page=1">First</a></li>
+    <li class="page-item <%=pageIndex == 1 ? "disable" : ""%>"><a class="page-link" href="ManagerProduct?page=<%=pageIndex == sumOfPage ? pageIndex - 1 : pageIndex%>">Previous</a></li>
+        <%
+            for (int i = 1; i <= sumOfPage; i++) {
+        %>
     <li class="page-item <%=pageIndex == i ? "active" : ""%>"><a class="page-link" href="ManagerProduct?page=<%=i%>"><%=i%></a></li>
         <%
             }
         %>
+    <li class="page-item <%=pageIndex == sumOfPage ? "disable" : ""%>"><a class="page-link" href="ManagerProduct?page=<%=pageIndex < sumOfPage ? pageIndex + 1 : pageIndex%>">Next</a></li>
+    <li class="page-item <%=pageIndex == sumOfPage ? "disable" : ""%>"><a class="page-link" href="ManagerProduct?page=<%=sumOfPage%>">LAST</a></li>
 </ul>
 
 <jsp:include page="../shared/footer.jsp" />

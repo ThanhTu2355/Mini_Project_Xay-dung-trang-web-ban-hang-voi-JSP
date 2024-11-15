@@ -19,8 +19,8 @@ import model.TaiKhoan;
  *
  * @author Admin
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "ChangePasswordServlet", urlPatterns = {"/ChangePasswordServlet"})
+public class ChangePasswordServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,28 +34,30 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        //b1. lấy thông tin username - password
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        
-        //b2. Xác thực thông tin
-        TaiKhoanDAO tkDAO = new TaiKhoanDAO();
-        TaiKhoan tk = tkDAO.checkLogin(username, password);
-        
-        if(tk!=null){//thành công
-            //lưu thông tin lịch sử (tài khoản xác thực thành công) vào session của người dùng
-            HttpSession session = request.getSession();
-            session.setAttribute("username", username);         
-            //điều hướng tới trang mặc định
-            response.sendRedirect("home.jsp");
-        }else{//thất bại
-            request.setAttribute("error", "Đăng nhập thất bại. (Do sai tên hoặc mật khẩu)");
-            //chuyển tiếp đến trang login
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+
+        //lấy thông tin
+        String oldpass = request.getParameter("oldpassword");
+        String newpass = request.getParameter("newpassword");
+        String confirmpass = request.getParameter("confirmpassword");
+
+        if (!newpass.equals(confirmpass)) {
+            request.setAttribute("error", "Mật khẩu mới và mật khẩu xác nhận không trùng khớp.");
+            request.getRequestDispatcher("changepassword.jsp").forward(request, response);
         }
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            
+
+        HttpSession session = request.getSession();
+        String username = (String) session.getAttribute("username");
+
+        TaiKhoanDAO tkDAO = new TaiKhoanDAO();
+        TaiKhoan tk = tkDAO.checkLogin(username, oldpass);
+        if (tk != null) {
+
+            tk.setMatkhau(newpass);
+            tkDAO.changePassword(tk);
+            request.getRequestDispatcher("home.jsp").forward(request, response);
+        } else {
+            request.setAttribute("error", "Mật khẩu cũ không đúng");
+            request.getRequestDispatcher("changepassword.jsp").forward(request, response);
         }
     }
 

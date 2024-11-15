@@ -14,7 +14,7 @@
                     <a class="nav-link" href="product.jsp">Product</a>
                 </li>  
                 <li class="nav-item">
-                    <a class="nav-link" href="ManagerProduct">Management Product</a>
+                    <a class="nav-link" href="ManagerProduct">Management</a>
                 </li>  
             </ul>
             <!--Hiển thị welcome user--->
@@ -26,11 +26,17 @@
                     <a class="nav-link" href="#"> Welcome <%=session.getAttribute("username")%> </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="changepassword.jsp"> Change Password </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="LogoutServlet"> Logout </a>
                 </li>
                 <%
                 } else {
                 %>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.jsp">Register</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="login.jsp"> Login </a>
                 </li>
