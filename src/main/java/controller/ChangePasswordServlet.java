@@ -43,6 +43,7 @@ public class ChangePasswordServlet extends HttpServlet {
         if (!newpass.equals(confirmpass)) {
             request.setAttribute("error", "Mật khẩu mới và mật khẩu xác nhận không trùng khớp.");
             request.getRequestDispatcher("changepassword.jsp").forward(request, response);
+            return;
         }
 
         HttpSession session = request.getSession();

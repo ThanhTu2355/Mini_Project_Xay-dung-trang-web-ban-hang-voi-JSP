@@ -46,7 +46,7 @@
         %>
         <tr>
             <td><%=x.getTenhoa()%></td>
-            <td><%=x.getGia()%></td>
+            <td><%=fmt.format(x.getGia())%></td>
             <td> <img src="assets/images/products/<%=x.getHinh()%>" style="width: 100px">  </td>
             <td><%=x.getMaloai()%></td>
             <td>
@@ -68,7 +68,7 @@
         int pageIndex = (int) request.getAttribute("pageIndex");
     %>
     <li class="page-item <%=pageIndex == 1 ? "disable" : ""%>"><a class="page-link" href="ManagerProduct?page=1">First</a></li>
-    <li class="page-item <%=pageIndex == 1 ? "disable" : ""%>"><a class="page-link" href="ManagerProduct?page=<%=pageIndex == sumOfPage ? pageIndex - 1 : pageIndex%>">Previous</a></li>
+    <li class="page-item <%=pageIndex == 1 ? "disable" : ""%>"><a class="page-link" href="ManagerProduct?page=<%=pageIndex == sumOfPage ? pageIndex - 1 : 1%>">Previous</a></li>
         <%
             for (int i = 1; i <= sumOfPage; i++) {
         %>
